@@ -1,11 +1,14 @@
 import React from 'react';
 import {
-  View,
   Pressable,
   StyleSheet,
-  type ViewStyle,
   type StyleProp,
+  type ViewStyle,
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  withTiming,
+} from 'react-native-reanimated';
 
 interface BottomSlideProps {
   isBottomSlideOpen: boolean;
@@ -20,12 +23,23 @@ export const BackDrop: React.FC<BottomSlideProps> = ({
   backdropStyle,
   handleClose,
 }) => {
+  const animatedBackdropStyle = useAnimatedStyle(() => {
+    return {
+      backgroundColor: withTiming(
+        isBottomSlideOpen ? 'rgba(0, 0, 0, 0.5)' : 'rgba(0, 0, 0, 0)',
+        { duration: 700 }
+      ),
+    };
+  });
+
   if (!isBottomSlideOpen || hideBackdrop) return null;
 
   return (
-    <View style={[styles.backdrop, backdropStyle]}>
+    <Animated.View
+      style={[styles.backdrop, animatedBackdropStyle, backdropStyle]}
+    >
       <Pressable style={styles.backdropButton} onPress={handleClose} />
-    </View>
+    </Animated.View>
   );
 };
 
@@ -36,9 +50,11 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   backdropButton: {
-    flex: 1,
+    width: '100%',
+    height: '100%',
   },
 });
