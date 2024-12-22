@@ -18,6 +18,7 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
+  withTiming,
 } from 'react-native-reanimated';
 import { BackDrop } from './BackDrop';
 
@@ -102,9 +103,7 @@ export const BottomSlide = forwardRef<BottomSlideRef, BottomSlideProps>(
     const handleClose = () => {
       setIsBottomSlideOpen(false);
       setActiveHeight(0);
-      translateY.value = withSpring(0, {
-        overshootClamping: true,
-      });
+      translateY.value = withTiming(0, {});
     };
 
     useImperativeHandle(ref, () => ({
