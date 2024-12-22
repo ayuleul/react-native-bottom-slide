@@ -6,7 +6,6 @@ import {
   type ReactNode,
 } from 'react';
 import {
-  Pressable,
   StyleSheet,
   useWindowDimensions,
   View,
@@ -20,6 +19,7 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
+import { BackDrop } from './BackDrop';
 
 const EXTRA_SPACE = 75;
 
@@ -139,18 +139,22 @@ export const BottomSlide = forwardRef<BottomSlideRef, BottomSlideProps>(
 
     return (
       <>
-        {isBottomSlideOpen && !hideBackdrop && (
-          <View style={[styles.backdrop, backdropStyle]}>
-            <Pressable style={styles.backdropButton} onPress={handleClose} />
-          </View>
-        )}
+        <BackDrop
+          isBottomSlideOpen={isBottomSlideOpen}
+          handleClose={handleClose}
+          hideBackdrop={hideBackdrop}
+          backdropStyle={backdropStyle}
+        />
         <GestureDetector gesture={gesture}>
           <Animated.View
             style={[styles.container, animatedStyle, containerStyle]}
           >
             <View style={[styles.handleStyle, handleStyle]} />
             <View style={[styles.contentStyle, contentStyle]}>{children}</View>
-            <View style={styles.mockContentStyle} onLayout={onContentLayout}>
+            <View
+              style={[containerStyle, styles.mockContentStyle]}
+              onLayout={onContentLayout}
+            >
               {children}
             </View>
           </Animated.View>
@@ -174,18 +178,6 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
     zIndex: 3,
-  },
-  backdrop: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    zIndex: 2,
-  },
-  backdropButton: {
-    flex: 1,
   },
   handleStyle: {
     width: 40,
