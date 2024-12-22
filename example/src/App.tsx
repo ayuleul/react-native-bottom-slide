@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { StyleSheet, View, Text, Button } from 'react-native';
+import { Button, StyleSheet, Text, View } from 'react-native';
 import { BottomSlide, type BottomSlideRef } from 'react-native-bottom-slide';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 

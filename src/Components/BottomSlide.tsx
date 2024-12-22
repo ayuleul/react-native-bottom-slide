@@ -125,48 +125,15 @@ export const BottomSlide = forwardRef<BottomSlideRef, BottomSlideProps>(
       setContentHeight(height + EXTRA_SPACE);
     }, []);
 
-    const gesture = Gesture.Manual()
-      .onTouchesDown((e, manager) => {
-        for (const touch of e.changedTouches) {
-          if (touch.y < activeHeight) {
-            translateY.value = withSpring(activeHeight - touch.y, {
-              mass: 1,
-              damping: 12,
-              stiffness: 80,
-            });
-          }
-        }
-
-        if (e.numberOfTouches >= 2) {
-          manager.activate();
-        }
+    const gesture = Gesture.Pan()
+      .onUpdate((e) => {
+        translateY.value = activeHeight - e.translationY;
       })
-      .onTouchesMove((e, manager) => {
-        for (const touch of e.changedTouches) {
-          if (touch.y < activeHeight) {
-            translateY.value = withSpring(activeHeight - touch.y, {
-              mass: 1,
-              damping: 12,
-              stiffness: 80,
-            });
-          }
-        }
-
-        if (e.numberOfTouches === 0) {
-          manager.end();
-        }
-      })
-      .onTouchesUp((e, manager) => {
-        for (const touch of e.changedTouches) {
-          const gestureThreshold = activeHeight * 0.3;
-          if (touch.y > gestureThreshold) {
-            runOnJS(handleClose)();
-          } else {
-            runOnJS(handleOpen)(1);
-          }
-        }
-        if (e.numberOfTouches === 0) {
-          manager.end();
+      .onEnd((e) => {
+        if (e.velocityY > 0) {
+          runOnJS(handleClose)();
+        } else {
+          runOnJS(handleOpen)(0);
         }
       });
 
