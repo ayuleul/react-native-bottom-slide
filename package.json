@@ -48,7 +48,8 @@
   "keywords": [
     "react-native",
     "ios",
-    "android"
+    "android",
+    "react-native-bottom-slide"
   ],
   "repository": {
     "type": "git",
